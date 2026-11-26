@@ -1,0 +1,20 @@
+{
+  "title": {
+    "en": "Dogman",
+    "el": "Dogman"
+  },
+  "summary": {
+    "en": "A dog in a suit, on a bold red background.",
+    "el": "Ένας σκύλος με κοστούμι σε έντονο κόκκινο φόντο."
+  },
+  "year": "2026",
+  "materials": {
+    "en": "Wood, water-based paint",
+    "el": "Ξύλο, βαφή νερού"
+  },
+  "forSale": true,
+  "price": {
+    "en": "On request",
+    "el": "Κατόπιν επικοινωνίας"
+  }
+}

@@ -34,6 +34,15 @@ Drop the original photos (JPG, PNG, WebP or iPhone photos exported as JPG) in a 
 ```
 
 `forSale: true` also lists the piece on the "Buy your own" page. `hidden: true` keeps a folder off the site.
-The three sample folders (`01-sunset`, `02-ocean`, `03-candy`) have `"placeholder": true` and generated images: delete them when real projects arrive.
 
 **ΕΛ.** Ένας φάκελος για κάθε έργο, μέσα στον φάκελο της κατηγορίας του (π.χ. `photos/diffusers/04-to-onoma/`). Βάζεις μέσα τις φωτογραφίες (με τη σειρά που θες να εμφανίζονται, π.χ. 01.jpg, 02.jpg) και, αν θέλεις, ένα `info.json` με τίτλο και κείμενα σε αγγλικά και ελληνικά. Οι φωτογραφίες μικραίνουν αυτόματα για το web. Η πρώτη φωτογραφία είναι το εξώφυλλο του έργου.
+
+## Photo names / Ονόματα φωτογραφιών
+
+**EN.** Name each photo `<name>_hero.jpg`, `<name>_side.jpg`, `<name>_detail.jpg`, `<name>_space.jpg`. They are shown in that order and the hero is the cover. Other names follow in filename order.
+
+**ΕΛ.** Ονόμασε κάθε φωτογραφία `<όνομα>_hero.jpg`, `<όνομα>_side.jpg`, `<όνομα>_detail.jpg`, `<όνομα>_space.jpg`. Εμφανίζονται με αυτή τη σειρά και η hero είναι το εξώφυλλο.
+
+## Home page / Αρχική σελίδα
+
+`photos/home/hero.jpg` is the big photo at the top of the home page. Optional: `diffusers.jpg`, `absorbers.jpg`, `wall-pixel-art.jpg`, `ground-pixel-art.jpg`, `shop.jpg` for the sections below. A missing file falls back to the first project's cover.

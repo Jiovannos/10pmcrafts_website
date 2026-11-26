@@ -13,11 +13,13 @@ import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 import { languages, site, ui, categories, pages, home, guide } from '../src/content.mjs';
 import { figures } from '../src/figures.mjs';
+import { cutout } from './cutout.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, '_site');
 const PHOTOS = path.join(ROOT, 'photos');
 const STATIC = path.join(ROOT, 'src', 'static');
+const CUTOUTS = path.join(ROOT, '.cache', 'cutouts');
 // Absolute base path, used only by 404.html (which can be served from any URL).
 // On GitHub Pages without a custom domain this is "/10pmcrafts_website/".
 const BASE = (process.env.SITE_BASE || '/').replace(/\/?$/, '/');
@@ -69,7 +71,10 @@ async function processImage(srcFile, outBase) {
     let width, height;
     return { src: rel, srcset: [], width, height };
   }
-  const meta = await sharp(srcFile).rotate().metadata();
+  // Studio shots on white get a transparent background and are trimmed to the piece.
+  const cut = await cutout(sharp, srcFile, CUTOUTS);
+  if (cut) srcFile = cut;
+  const meta = await sharp(srcFile, { limitInputPixels: false }).rotate().metadata();
   const portrait = (meta.orientation || 1) >= 5;
   const fullW = portrait ? meta.height : meta.width;
   const fullH = portrait ? meta.width : meta.height;
@@ -80,16 +85,37 @@ async function processImage(srcFile, outBase) {
     const dest = path.join(OUT, rel);
     if (!(await newer(srcFile, dest))) {
       await fs.mkdir(path.dirname(dest), { recursive: true });
-      await sharp(srcFile).rotate().resize({ width, withoutEnlargement: true }).webp({ quality: 82 }).toFile(dest);
+      await sharp(srcFile, { limitInputPixels: false }).rotate().resize({ width, withoutEnlargement: true }).webp({ quality: 82 }).toFile(dest);
     }
     srcset.push([rel, width]);
     if (width === fullW) break;
   }
   const largest = srcset[srcset.length - 1];
-  return { src: largest[0], srcset, width: fullW, height: fullH };
+  return { src: largest[0], srcset, width: fullW, height: fullH, cut: !!cut };
 }
 
 // ---------- read photos ----------
+
+// Photos named like "gorilla_hero.jpg" are ordered by the word after the last "_" or "-":
+// hero (the cover), side, detail, space/room. Any other photo follows in filename order.
+const PHOTO_ROLES = ['hero', 'side', 'detail', 'space', 'room'];
+const photoRole = (f) => {
+  const i = PHOTO_ROLES.indexOf(path.parse(f).name.toLowerCase().split(/[-_ ]/).pop());
+  return i < 0 ? PHOTO_ROLES.length : i;
+};
+const byPhotoRole = (a, b) => photoRole(a) - photoRole(b) || a.localeCompare(b, undefined, { numeric: true });
+
+// Optional photos for the home page: photos/home/hero.jpg and photos/home/<category or "shop">.jpg.
+async function readHome() {
+  const dir = path.join(PHOTOS, 'home');
+  const home = {};
+  if (!existsSync(dir)) return home;
+  for (const f of (await fs.readdir(dir)).filter((x) => IMAGE_RE.test(x) && !x.startsWith('.'))) {
+    const key = path.parse(f).name.toLowerCase();
+    home[key] = await processImage(path.join(dir, f), `media/home/${key}`);
+  }
+  return home;
+}
 
 async function readProjects(cat) {
   const dir = path.join(PHOTOS, cat.slug);
@@ -114,7 +140,7 @@ async function readProjects(cat) {
     if (info.hidden) continue;
     const files = (await fs.readdir(pdir))
       .filter((f) => IMAGE_RE.test(f) && !f.startsWith('.'))
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      .sort(byPhotoRole);
     if (!files.length) {
       console.warn(`! ${cat.slug}/${folder} has no photos, skipped`);
       continue;
@@ -175,7 +201,8 @@ function picture(c, image, { alt, sizes = '100vw', eager = false, cls = '' } = {
   if (!image) return '';
   const srcset = image.srcset.length > 1 ? ` srcset="${image.srcset.map(([s, w]) => `${c.u(s)} ${w}w`).join(', ')}" sizes="${sizes}"` : '';
   const dims = image.width ? ` width="${image.width}" height="${image.height}"` : '';
-  return `<img class="${cls}" src="${c.u(image.src)}"${srcset}${dims} alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
+  const klass = [cls, image.cut ? 'cut' : ''].filter(Boolean).join(' ');
+  return `<img class="${klass}" src="${c.u(image.src)}"${srcset}${dims} alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
 }
 
 function socialLinks(lang, cls = 'social') {
@@ -194,7 +221,7 @@ function destinations(data, lang) {
     kicker: t(cat.kicker, lang),
     tagline: t(cat.tagline, lang),
     intro: cat.intro,
-    image: data.covers[cat.slug],
+    image: data.home[cat.slug] || data.covers[cat.slug],
     soon: !data.projects[cat.slug].length,
   }));
   list.push(
@@ -206,7 +233,7 @@ function destinations(data, lang) {
       kicker: t(pages.shop.kicker, lang),
       tagline: t(pages.shop.tagline, lang),
       intro: pages.shop.intro,
-      image: data.covers.shop,
+      image: data.home.shop || data.covers.shop,
     },
     {
       key: 'how-it-works',
@@ -377,8 +404,10 @@ function homePage(data, lang) {
   const c = { ...ctx(lang, prefix(lang)), data };
   const H = home[lang];
   const T = ui[lang];
-  const featured = data.projects.diffusers[0];
-  const dests = destinations(data, lang);
+  const featured = data.projects.diffusers.find((p) => p.info.home) || data.projects.diffusers[0];
+  // Sections under the big photo, in this order. The other categories are still in the menu.
+  const all = destinations(data, lang);
+  const dests = HOME_SECTIONS.map((key) => all.find((d) => d.key === key)).filter(Boolean);
   const sections = dests
     .map((d, i) => {
       const text = `<div class="feature-text reveal">
@@ -406,15 +435,41 @@ function homePage(data, lang) {
       <p class="lead">${esc(H.lead)}</p>
       <div class="actions">${pill(c.l('diffusers/'), H.cta)}<a class="link-quiet" href="${c.l(`${pages.howItWorks.slug}/`)}">${esc(H.secondary)}</a></div>
     </div>
-    <a class="hero-media" href="${featured ? c.l(`diffusers/${featured.slug}/`) : c.l('diffusers/')}">
-      ${picture(c, featured?.images[1] || featured?.cover, { alt: featured ? t(featured.title, lang) : '', sizes: '(min-width: 900px) 50vw, 100vw', eager: true })}
-      ${placeholderTag(lang, featured)}
-    </a>
+    ${heroGallery(c, featured)}
   </div>
-  <a class="scroll-cue" href="#diffusers" aria-label="${esc(T.explore)}"><span></span></a>
+  <a class="scroll-cue" href="#${dests[0]?.key || ''}" aria-label="${esc(T.explore)}"><span></span></a>
 </section>
 ${sections}`;
-  return layout(c, { body, bodyClass: 'page-home', image: featured?.cover });
+  return layout(c, { body, bodyClass: 'page-home', image: data.home.hero || featured?.cover });
+}
+
+const HOME_SECTIONS = ['how-it-works', 'absorbers', 'shop', 'contact'];
+
+// The big photo on the home page: the featured piece's hero (or photos/home/hero.jpg),
+// then its other photos, with arrows. The featured piece has "home": true in info.json.
+function heroGallery(c, featured) {
+  const { lang, data } = c;
+  const T = ui[lang];
+  const href = featured ? c.l(`diffusers/${featured.slug}/`) : c.l('diffusers/');
+  const title = featured ? t(featured.title, lang) : '';
+  const images = [data.home.hero || featured?.cover, ...(featured?.images.slice(1) || [])].filter(Boolean);
+  const slides = images
+    .map(
+      (im, k) =>
+        `<a class="hero-slide${k ? '' : ' is-active'}" href="${href}"${k ? ' hidden' : ''}>${picture(c, im, { alt: title ? `${title}, ${k + 1}/${images.length}` : '', sizes: '(min-width: 900px) 50vw, 100vw', eager: k === 0 })}</a>`,
+    )
+    .join('\n      ');
+  const nav =
+    images.length > 1
+      ? `<button type="button" class="hero-btn hero-prev" aria-label="${esc(T.prevPhoto)}">${icons.chevL}</button>
+      <button type="button" class="hero-btn hero-next" aria-label="${esc(T.nextPhoto)}">${icons.chevR}</button>
+      <div class="hero-dots">${images.map((_, k) => `<button type="button" class="${k ? '' : 'is-active'}" data-index="${k}" aria-label="${k + 1}/${images.length}"></button>`).join('')}</div>`
+      : '';
+  return `<div class="hero-media hero-gallery">
+      ${slides}
+      ${placeholderTag(lang, featured)}
+      ${nav}
+    </div>`;
 }
 
 function categoryPage(data, cat, lang) {
@@ -632,7 +687,7 @@ async function build() {
   await copyDir(STATIC, OUT);
   await fs.copyFile(path.join(ROOT, 'CNAME'), path.join(OUT, 'CNAME')).catch(() => {});
 
-  const data = { projects: {}, covers: {} };
+  const data = { projects: {}, covers: {}, home: await readHome() };
   for (const cat of categories) {
     data.projects[cat.slug] = await readProjects(cat);
     const fallback = path.join(STATIC, 'img', 'categories', `${cat.slug}.jpg`);

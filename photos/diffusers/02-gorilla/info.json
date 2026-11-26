@@ -1,0 +1,21 @@
+{
+  "title": {
+    "en": "Gorilla",
+    "el": "Γορίλας"
+  },
+  "summary": {
+    "en": "A lime green gorilla staring out of a black background.",
+    "el": "Ένας λαχανί γορίλας κοιτάζει έξω από ένα μαύρο φόντο."
+  },
+  "year": "2026",
+  "materials": {
+    "en": "Wood, water-based paint",
+    "el": "Ξύλο, βαφή νερού"
+  },
+  "forSale": true,
+  "price": {
+    "en": "On request",
+    "el": "Κατόπιν επικοινωνίας"
+  },
+  "home": true
+}

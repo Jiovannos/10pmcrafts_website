@@ -292,3 +292,27 @@ body.menu-open { overflow: hidden; }
   .lb-prev, .lb-next { top: auto; bottom: 16px; translate: none; }
   .footer-bottom { flex-direction: column; gap: 8px; }
 }
+
+/* Pieces are cut out of their white studio background (img.cut): no frame around them,
+   the whole piece fits its box, and a soft shadow appears on hover. */
+:is(.hero-media, .feature-media, .card-img, .stage, .soon-media) { background: none; box-shadow: none; overflow: visible; }
+:is(.hero-media, .feature-media, .card-img, .stage, .soon-media) img:not(.cut) { border-radius: var(--radius); box-shadow: var(--shadow); object-fit: cover; }
+:is(.thumb, .pn-img, .mini-img, .menu-tile-img) { background: none; }
+:is(.thumb, .pn-img, .mini-img, .menu-tile-img) img:not(.cut) { object-fit: cover; }
+img.cut { object-fit: contain; padding: 4%; box-sizing: border-box; filter: drop-shadow(0 0 0 rgba(40, 25, 10, 0)); transition: filter .35s ease, transform .6s ease; }
+:is(.thumb, .pn-img, .mini-img, .menu-tile-img) img.cut { padding: 6%; }
+img.cut:hover, a:hover img.cut, .card:hover img.cut { filter: drop-shadow(0 16px 18px rgba(40, 25, 10, .28)); }
+
+/* Home page photo with arrows */
+.hero-media { aspect-ratio: 4 / 5; max-height: 82vh; width: 100%; }
+.hero-slide { position: absolute; inset: 0; display: block; }
+.hero-slide[hidden] { display: none; }
+.hero-slide img { width: 100%; height: 100%; animation: fade .45s ease; }
+.hero-btn { position: absolute; top: 50%; translate: 0 -50%; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; background: rgba(255, 255, 255, .92); color: var(--ink); box-shadow: 0 4px 14px rgba(0, 0, 0, .14); transition: background .2s, scale .2s; }
+.hero-btn:hover { background: #fff; scale: 1.06; }
+.hero-btn svg { width: 20px; height: 20px; }
+.hero-prev { left: -10px; }
+.hero-next { right: -10px; }
+.hero-dots { position: absolute; left: 0; right: 0; bottom: -26px; display: flex; justify-content: center; gap: 8px; }
+.hero-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px; background: var(--ink); opacity: .25; cursor: pointer; transition: opacity .2s, width .2s; }
+.hero-dots button.is-active { opacity: .8; width: 22px; }

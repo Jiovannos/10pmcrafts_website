@@ -46,6 +46,35 @@
     reveals.forEach((el) => io.observe(el));
   } else reveals.forEach((el) => el.classList.add('is-in'));
 
+  // ---------- home page photo, with arrows ----------
+  const hero = $('.hero-gallery');
+  if (hero) {
+    const slides = $$('.hero-slide', hero);
+    const dots = $$('.hero-dots button', hero);
+    let h = 0;
+    const go = (k) => {
+      k = (k + slides.length) % slides.length;
+      slides[h].hidden = true;
+      dots[h] && dots[h].classList.remove('is-active');
+      h = k;
+      slides[h].hidden = false;
+      dots[h] && dots[h].classList.add('is-active');
+    };
+    const heroPrev = $('.hero-prev', hero);
+    const heroNext = $('.hero-next', hero);
+    heroPrev && heroPrev.addEventListener('click', () => go(h - 1));
+    heroNext && heroNext.addEventListener('click', () => go(h + 1));
+    dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+    let hx = null;
+    hero.addEventListener('touchstart', (e) => { hx = e.touches[0].clientX; }, { passive: true });
+    hero.addEventListener('touchend', (e) => {
+      if (hx === null) return;
+      const dx = e.changedTouches[0].clientX - hx;
+      if (Math.abs(dx) > 50) go(h + (dx < 0 ? 1 : -1));
+      hx = null;
+    });
+  }
+
   // ---------- project gallery ----------
   // Left/right walks through the photos; past the first or last photo it goes to the
   // previous or next project of the same category.
