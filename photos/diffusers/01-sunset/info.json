@@ -1,0 +1,17 @@
+{
+  "placeholder": true,
+  "title": { "en": "Sunset", "el": "Ηλιοβασίλεμα" },
+  "summary": {
+    "en": "A warm skyline diffuser in oranges, reds and sand tones.",
+    "el": "Ένας ζεστός skyline diffuser σε πορτοκαλί, κόκκινους και αμμώδεις τόνους."
+  },
+  "description": {
+    "en": ["Sample project: replace these photos and this text with a real piece.", "Each block has a different depth, so sound hitting the panel is scattered in many directions instead of bouncing straight back."],
+    "el": ["Δείγμα έργου: αντικατέστησε τις φωτογραφίες και το κείμενο με πραγματικό έργο.", "Κάθε κυβάκι έχει διαφορετικό βάθος, έτσι ο ήχος που χτυπά το πάνελ σκορπίζεται προς πολλές κατευθύνσεις αντί να γυρίζει πίσω ευθεία."]
+  },
+  "year": "2026",
+  "size": "60 × 60 × 10 cm",
+  "materials": { "en": "Wood, water-based paint", "el": "Ξύλο, βαφή νερού" },
+  "forSale": true,
+  "price": { "en": "On request", "el": "Κατόπιν επικοινωνίας" }
+}
