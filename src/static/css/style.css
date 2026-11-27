@@ -318,15 +318,9 @@ img.cut:hover, a:hover img.cut, .card:hover img.cut { filter: drop-shadow(0 16px
 .hero-dots button.is-active { opacity: .8; width: 22px; }
 
 /* Past work */
-/* A loose, collage-like arrangement: each photo keeps its own shape, widths vary a little. */
-.past-grid { list-style: none; margin: 0; padding: 0; columns: 3 280px; column-gap: 40px; }
-.past-grid li { break-inside: avoid; margin: 0 0 44px; }
-.past-grid li:nth-child(4n+2) .past-item { width: 82%; margin-left: auto; }
-.past-grid li:nth-child(4n+3) .past-item { width: 90%; }
-.past-grid li:nth-child(4n+4) .past-item { width: 86%; margin-inline: auto; }
-.past-grid li:nth-child(5n+3) { padding-top: 36px; }
+.past-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 32px 28px; }
 .past-item { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; color: inherit; font: inherit; }
-.past-item img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: var(--shadow); transition: transform .6s ease, box-shadow .4s ease; }
+.past-item img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; box-shadow: var(--shadow); transition: transform .6s ease, box-shadow .4s ease; }
 .past-item:hover img { transform: translateY(-4px); box-shadow: 0 22px 40px rgba(40, 25, 10, .22); }
 .past-title { display: block; margin-top: 12px; font-family: 'Noto Serif Display', serif; font-size: 1.15rem; }
 .past-box figcaption strong { display: block; font-family: 'Noto Serif Display', serif; font-size: 1.3rem; font-weight: 500; margin-bottom: 4px; }
@@ -341,4 +335,4 @@ img.cut:hover, a:hover img.cut, .card:hover img.cut { filter: drop-shadow(0 16px
 .past-close { top: 14px; right: 14px; }
 .past-prev { left: 12px; top: 50%; translate: 0 -50%; }
 .past-next { right: 12px; top: 50%; translate: 0 -50%; }
-@media (max-width: 600px) { .past-grid { columns: 2 140px; column-gap: 16px; } .past-grid li { margin-bottom: 24px; } .past-box figure { padding: 56px 12px 24px; } }
+@media (max-width: 600px) { .past-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; } .past-box figure { padding: 56px 12px 24px; } }

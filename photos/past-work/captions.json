@@ -1,34 +1,49 @@
 {
   "01_Dark Eye.jpg": {
-    "title": { "en": "Dark Eye", "el": "Dark Eye" },
+    "title": {
+      "en": "Dark Eye",
+      "el": "Dark Eye"
+    },
     "text": {
       "en": "One of our very first pieces, made to fit the music corner of our own home, among the guitars.",
       "el": "Ένα από τα πρώτα μας έργα, φτιαγμένο για τη μουσική γωνιά του σπιτιού μας, ανάμεσα στις κιθάρες."
     }
   },
   "02_Dancing on a disc.png": {
-    "title": { "en": "Dancing on a Disc", "el": "Χορός πάνω σε δίσκο" },
+    "title": {
+      "en": "Dancing on a Disc",
+      "el": "Χορός πάνω σε δίσκο"
+    },
     "text": {
       "en": "Two figures dancing on a vinyl record, made for the home studio of a Greek singer.",
       "el": "Δύο φιγούρες χορεύουν πάνω σε έναν δίσκο βινυλίου. Φτιάχτηκε για το home studio ανθρώπου του ελληνικού τραγουδιού."
     }
   },
   "03_Drummer.jpg": {
-    "title": { "en": "Drummer", "el": "Drummer" },
+    "title": {
+      "en": "Drummer (hybrid)",
+      "el": "Drummer (hybrid)"
+    },
     "text": {
-      "en": "Made for the home studio of a percussionist, right above the drum kit where the rhythm happens.",
-      "el": "Φτιάχτηκε για το home studio ενός περκασιονίστα, ακριβώς πάνω από τα τύμπανα, εκεί που γεννιέται ο ρυθμός."
+      "en": "A special order for the home studio of a percussionist. It is a hybrid panel: about a quarter of the blocks are replaced by holes, with an absorber behind the diffuser, so it absorbs and diffuses at the same time.",
+      "el": "Ειδική παραγγελία για το home studio ενός περκασιονίστα. Είναι υβριδικό πάνελ: περίπου το ένα τέταρτο των κυβάκων έχει αντικατασταθεί από τρύπες, με έναν απορροφητή πίσω από τον διαχυτή, έτσι απορροφά και διαχέει ταυτόχρονα."
     }
   },
   "04_Instruments_dancing.jpg": {
-    "title": { "en": "Instruments Dancing", "el": "Ο χορός των οργάνων" },
+    "title": {
+      "en": "Instruments Dancing",
+      "el": "Ο χορός των οργάνων"
+    },
     "text": {
       "en": "A family piece: each child's favourite instrument dances on top of their father's favourite, the vibraphone.",
       "el": "Ένα οικογενειακό έργο: το αγαπημένο όργανο κάθε παιδιού χορεύει πάνω στο αγαπημένο όργανο του μπαμπά, το βιμπράφωνο."
     }
   },
   "05_Logo.jpg": {
-    "title": { "en": "Logo", "el": "Logo" },
+    "title": {
+      "en": "Logo",
+      "el": "Logo"
+    },
     "text": {
       "en": "Made for a nutritionist's office that had a problem with echo. The panel is her own logo, so the piece that fixes the sound also welcomes her clients.",
       "el": "Φτιάχτηκε για το γραφείο μιας διατροφολόγου που είχε πρόβλημα με την αντήχηση. Το πάνελ είναι το λογότυπό της, έτσι το έργο που διορθώνει τον ήχο καλωσορίζει και τους πελάτες της."
