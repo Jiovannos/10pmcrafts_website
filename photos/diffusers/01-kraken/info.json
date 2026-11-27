@@ -1,0 +1,20 @@
+{
+  "title": {
+    "en": "Kraken",
+    "el": "Κράκεν"
+  },
+  "summary": {
+    "en": "A sea monster rising from dark water in fiery oranges and reds.",
+    "el": "Ένα θαλάσσιο τέρας αναδύεται από σκοτεινά νερά σε φλογερά πορτοκαλί και κόκκινα."
+  },
+  "year": "2026",
+  "materials": {
+    "en": "Wood, water-based paint",
+    "el": "Ξύλο, βαφή νερού"
+  },
+  "forSale": true,
+  "price": {
+    "en": "On request",
+    "el": "Κατόπιν επικοινωνίας"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "title": {
+    "en": "Ice cream",
+    "el": "Παγωτό"
+  },
+  "summary": {
+    "en": "A chocolate ice cream bar, bitten, on a green background.",
+    "el": "Ένα δαγκωμένο παγωτό ξυλάκι σοκολάτα σε πράσινο φόντο."
+  },
+  "year": "2026",
+  "materials": {
+    "en": "Wood, water-based paint",
+    "el": "Ξύλο, βαφή νερού"
+  },
+  "forSale": true,
+  "price": {
+    "en": "On request",
+    "el": "Κατόπιν επικοινωνίας"
+  }
+}
