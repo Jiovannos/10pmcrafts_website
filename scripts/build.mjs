@@ -629,14 +629,19 @@ function pastWorkPage(data, lang) {
   const grid = items.length
     ? `<ul class="past-grid">${items
         .map(
-          (x, k) => `<li><button type="button" class="past-item" data-index="${k}" data-full="${c.u(x.image.src)}" data-caption="${esc(t(x.caption, lang))}">${picture(c, x.image, { alt: t(x.caption, lang), sizes: '(min-width: 1100px) 25vw, (min-width: 700px) 33vw, 50vw' })}</button></li>`,
+          (x, k) => {
+            const cap = x.caption || {};
+            const title = t(cap.title, lang);
+            const text = cap.text ? t(cap.text, lang) : typeof cap === 'string' || cap.en ? t(cap, lang) : '';
+            return `<li><button type="button" class="past-item" data-index="${k}" data-full="${c.u(x.image.src)}" data-title="${esc(title)}" data-caption="${esc(text)}">${picture(c, x.image, { alt: [title, text].filter(Boolean).join('. '), sizes: '(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw' })}${title ? `<span class="past-title">${esc(title)}</span>` : ''}</button></li>`;
+          },
         )
         .join('\n')}</ul>`
     : `<p class="empty">${esc(t(P.empty, lang))}</p>`;
   const body = `${pageHead(lang, { kicker: t(P.kicker, lang), title: t(P.title, lang), intro: [t(P.tagline, lang)] })}
 <section class="wrap">${grid}</section>
 <dialog class="past-box">
-  <figure><img alt=""><figcaption></figcaption></figure>
+  <figure><img alt=""><figcaption><strong></strong><span></span></figcaption></figure>
   <button type="button" class="past-close" aria-label="${esc(T.close)}">${icons.close}</button>
   <button type="button" class="past-prev" aria-label="${esc(T.prevPhoto)}">${icons.chevL}</button>
   <button type="button" class="past-next" aria-label="${esc(T.nextPhoto)}">${icons.chevR}</button>

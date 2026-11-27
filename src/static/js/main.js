@@ -84,10 +84,11 @@
       p = (k + items.length) % items.length;
       const img = $('img', pastBox);
       img.src = items[p].dataset.full;
-      img.alt = items[p].dataset.caption || '';
-      const cap = $('figcaption', pastBox);
-      cap.textContent = items[p].dataset.caption || '';
-      cap.hidden = !cap.textContent;
+      const { title = '', caption = '' } = items[p].dataset;
+      img.alt = [title, caption].filter(Boolean).join('. ');
+      $('figcaption strong', pastBox).textContent = title;
+      $('figcaption span', pastBox).textContent = caption;
+      $('figcaption', pastBox).hidden = !title && !caption;
     };
     items.forEach((it, k) => it.addEventListener('click', () => { showPast(k); pastBox.showModal(); }));
     $('.past-close', pastBox).addEventListener('click', () => pastBox.close());
