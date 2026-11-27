@@ -292,6 +292,7 @@ function layout(c, { title, description, body, alt, bodyClass = '', image }) {
     ['diffusers/', t(categories[0].title, lang)],
     [`${pages.howItWorks.slug}/`, t(pages.howItWorks.menuTitle, lang)],
     [`${pages.shop.slug}/`, t(pages.shop.menuTitle, lang)],
+    ...(data.pastWork.length ? [[`${pages.pastWork.slug}/`, t(pages.pastWork.menuTitle, lang)]] : []),
     [`${pages.contact.slug}/`, t(pages.contact.menuTitle, lang)],
   ];
   const current = c.path.replace(/^el\//, '');
