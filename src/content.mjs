@@ -84,7 +84,8 @@ export const categories = [
   {
     slug: 'diffusers',
     cover: 'img/categories/diffusers.jpg',
-    title: { en: 'Diffuser panels', el: 'Diffusers' },
+    title: { en: 'Diffusers ready to order', el: 'Diffusers έτοιμοι για παραγγελία' },
+    menuTitle: { en: 'Diffusers', el: 'Diffusers' },
     kicker: { en: 'Acoustic art', el: 'Ακουστική τέχνη' },
     tagline: {
       en: 'Wooden sound diffusers in colour.',
@@ -215,10 +216,10 @@ export const pages = {
     },
   },
   pastWork: {
-    slug: 'custom-orders',
-    title: { en: 'Past custom orders', el: 'Παραγγελίες που φτιάξαμε' },
-    menuTitle: { en: 'Custom orders', el: 'Παραγγελίες' },
-    kicker: { en: 'Made to order', el: 'Κατά παραγγελία' },
+    slug: 'our-work',
+    title: { en: 'Our work', el: 'Τα έργα μας' },
+    menuTitle: { en: 'Our work', el: 'Έργα μας' },
+    kicker: { en: 'Delivered commissions', el: 'Παραδομένες παραγγελίες' },
     tagline: {
       en: 'Pieces we made for other people’s homes, studios and offices.',
       el: 'Έργα που φτιάξαμε για σπίτια, studios και γραφεία άλλων.',

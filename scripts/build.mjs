@@ -221,6 +221,7 @@ function destinations(data, lang) {
     key: cat.slug,
     href: `${cat.slug}/`,
     title: t(cat.title, lang),
+    menuTitle: t(cat.menuTitle || cat.title, lang),
     kicker: t(cat.kicker, lang),
     tagline: t(cat.tagline, lang),
     intro: cat.intro,
@@ -289,7 +290,7 @@ function layout(c, { title, description, body, alt, bodyClass = '', image }) {
   const desc = description || home[lang].metaDescription;
   const ogImage = image ? SITE_URL + image.src : SITE_URL + 'img/logo-large.png';
   const nav = [
-    ['diffusers/', t(categories[0].title, lang)],
+    ['diffusers/', t(categories[0].menuTitle || categories[0].title, lang)],
     [`${pages.howItWorks.slug}/`, t(pages.howItWorks.menuTitle, lang)],
     [`${pages.shop.slug}/`, t(pages.shop.menuTitle, lang)],
     ...(data.pastWork.length ? [[`${pages.pastWork.slug}/`, t(pages.pastWork.menuTitle, lang)]] : []),
@@ -570,7 +571,7 @@ function projectPage(data, p, i, lang) {
       : '<span></span>';
 
   const body = `<article class="project wrap" data-prev="${prev ? href(prev) : ''}" data-next="${next ? href(next) : ''}">
-  <nav class="crumbs"><a href="${c.l(`${cat.slug}/`)}">${esc(t(cat.title, lang))}</a><span>/</span><span>${esc(title)}</span></nav>
+  <nav class="crumbs"><a href="${c.l(`${cat.slug}/`)}">${esc(t(cat.menuTitle || cat.title, lang))}</a><span>/</span><span>${esc(title)}</span></nav>
   <div class="project-layout">
     <div class="gallery" data-count="${p.images.length}">
       <div class="stage">
@@ -584,7 +585,7 @@ function projectPage(data, p, i, lang) {
       ${thumbs}
     </div>
     <aside class="project-info">
-      <span class="kicker">${pixels}${esc(t(cat.title, lang))}</span>
+      <span class="kicker">${pixels}${esc(t(cat.menuTitle || cat.title, lang))}</span>
       <h1>${esc(title)}</h1>
       ${info.summary ? `<p class="tagline">${esc(t(info.summary, lang))}</p>` : ''}
       ${paras(info.description || [], lang)}
@@ -601,7 +602,7 @@ function projectPage(data, p, i, lang) {
   <button class="lb-btn lb-next" type="button" aria-label="${esc(T.nextPhoto)}">${icons.chevR}</button>
 </div>`;
   return layout(c, {
-    title: `${title} · ${t(cat.title, lang)}`,
+    title: `${title} · ${t(cat.menuTitle || cat.title, lang)}`,
     description: t(info.summary, lang) || t(cat.tagline, lang),
     body,
     bodyClass: 'page-project',
