@@ -75,6 +75,32 @@
     });
   }
 
+  // ---------- past work: click a photo to see it large, with its caption ----------
+  const pastBox = $('.past-box');
+  if (pastBox && pastBox.showModal) {
+    const items = $$('.past-item');
+    let p = 0;
+    const showPast = (k) => {
+      p = (k + items.length) % items.length;
+      const img = $('img', pastBox);
+      img.src = items[p].dataset.full;
+      img.alt = items[p].dataset.caption || '';
+      const cap = $('figcaption', pastBox);
+      cap.textContent = items[p].dataset.caption || '';
+      cap.hidden = !cap.textContent;
+    };
+    items.forEach((it, k) => it.addEventListener('click', () => { showPast(k); pastBox.showModal(); }));
+    $('.past-close', pastBox).addEventListener('click', () => pastBox.close());
+    $('.past-prev', pastBox).addEventListener('click', () => showPast(p - 1));
+    $('.past-next', pastBox).addEventListener('click', () => showPast(p + 1));
+    pastBox.addEventListener('click', (e) => e.target === pastBox && pastBox.close());
+    pastBox.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') showPast(p - 1);
+      if (e.key === 'ArrowRight') showPast(p + 1);
+    });
+    if (items.length < 2) $$('.past-prev, .past-next', pastBox).forEach((b) => (b.hidden = true));
+  }
+
   // ---------- project gallery ----------
   // Left/right walks through the photos; past the first or last photo it goes to the
   // previous or next project of the same category.

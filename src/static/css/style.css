@@ -316,3 +316,22 @@ img.cut:hover, a:hover img.cut, .card:hover img.cut { filter: drop-shadow(0 16px
 .hero-dots { position: absolute; left: 0; right: 0; bottom: -26px; display: flex; justify-content: center; gap: 8px; }
 .hero-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px; background: var(--ink); opacity: .25; cursor: pointer; transition: opacity .2s, width .2s; }
 .hero-dots button.is-active { opacity: .8; width: 22px; }
+
+/* Past work */
+.past-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+.past-item { display: block; width: 100%; aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 14px; overflow: hidden; }
+.past-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.past-item img.cut { object-fit: contain; }
+.past-item:hover img { transform: scale(1.03); }
+.past-box { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; }
+.past-box::backdrop { background: rgba(20, 18, 28, .92); }
+.past-box figure { margin: 0; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 56px 64px 32px; box-sizing: border-box; }
+.past-box img { max-width: 100%; max-height: calc(100% - 70px); object-fit: contain; }
+.past-box figcaption { color: #f7f3ec; max-width: 60ch; text-align: center; line-height: 1.5; }
+.past-box button { position: absolute; width: 44px; height: 44px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; background: rgba(255, 255, 255, .12); color: #fff; }
+.past-box button:hover { background: rgba(255, 255, 255, .24); }
+.past-box button svg { width: 20px; height: 20px; }
+.past-close { top: 14px; right: 14px; }
+.past-prev { left: 12px; top: 50%; translate: 0 -50%; }
+.past-next { right: 12px; top: 50%; translate: 0 -50%; }
+@media (max-width: 600px) { .past-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .past-box figure { padding: 56px 12px 24px; } }

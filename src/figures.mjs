@@ -57,8 +57,11 @@ export const figures = {
       .join('')}
   </svg>`,
 
-  room: `<svg viewBox="0 0 560 320" role="img" aria-label="Room plan: absorbers on the side walls, diffuser on the back wall">
+  room: `<svg viewBox="0 0 560 320" role="img" aria-label="Room plan: diffuser on the back wall, absorbers on the side walls, bass traps in the corners">
     <rect x="60" y="30" width="440" height="260" rx="6" fill="none" stroke="${ink}" stroke-width="3"/>
+    ${[[62, 32, 1, 1], [498, 32, -1, 1], [62, 288, 1, -1], [498, 288, -1, -1]]
+      .map(([x, y, sx, sy]) => `<path d="M${x} ${y} h${sx * 44} L${x} ${y + sy * 44} z" fill="${C[5]}" opacity=".85"/>`)
+      .join('')}
     ${speaker(200, 80)}${speaker(360, 80)}
     <circle cx="280" cy="200" r="16" fill="${C[0]}"/><path d="M268 196 q12 -14 24 0" fill="none" stroke="#fff" stroke-width="2"/>
     <rect x="62" y="110" width="14" height="70" fill="${C[1]}"/>
@@ -71,5 +74,7 @@ export const figures = {
     ${label(110, 102, 'absorber')}
     ${label(450, 102, 'absorber')}
     ${label(280, 254, 'diffuser')}
+    ${label(112, 52, 'bass trap', 'start')}
+    ${label(448, 52, 'bass trap', 'end')}
   </svg>`,
 };

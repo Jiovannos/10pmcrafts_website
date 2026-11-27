@@ -212,9 +212,12 @@ function socialLinks(lang, cls = 'social') {
   </ul>`;
 }
 
+// Categories with `hidden: true` in content.mjs still get their pages, but nothing links to them.
+const shownCategories = categories.filter((cat) => !cat.hidden);
+
 // Everything the menu and home page list, in order.
 function destinations(data, lang) {
-  const list = categories.map((cat) => ({
+  const list = shownCategories.map((cat) => ({
     key: cat.slug,
     href: `${cat.slug}/`,
     title: t(cat.title, lang),
@@ -244,6 +247,19 @@ function destinations(data, lang) {
       tagline: t(pages.howItWorks.tagline, lang),
       figure: 'diffusion',
     },
+    ...(data.pastWork.length
+      ? [
+          {
+            key: 'past-work',
+            href: `${pages.pastWork.slug}/`,
+            title: t(pages.pastWork.title, lang),
+            menuTitle: t(pages.pastWork.menuTitle, lang),
+            kicker: t(pages.pastWork.kicker, lang),
+            tagline: t(pages.pastWork.tagline, lang),
+            image: data.pastWork[0].image,
+          },
+        ]
+      : []),
     {
       key: 'contact',
       href: `${pages.contact.slug}/`,
@@ -312,7 +328,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l}" href="${SITE_URL}$
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600&family=Noto+Serif+Display:ital,wght@0,500;0,600;1,500&display=swap">
 <link rel="stylesheet" href="${c.u('css/style.css')}">
-${c.path === '' ? `<script>try{if(!localStorage.getItem('lang')&&/^el\\b/i.test(navigator.language||''))location.replace('el/')}catch(e){}</script>` : ''}
+${c.path === '' ? `<script>try{if(!localStorage.getItem('lang')&&(/^el\\b/i.test(navigator.language||'')||Intl.DateTimeFormat().resolvedOptions().timeZone==='Europe/Athens'))location.replace('el/')}catch(e){}</script>` : ''}
 <script src="${c.u('js/main.js')}" defer></script>
 </head>
 <body class="${bodyClass}">
@@ -335,7 +351,7 @@ ${c.path === '' ? `<script>try{if(!localStorage.getItem('lang')&&/^el\\b/i.test(
 <div class="menu" id="site-menu" hidden>
   <div class="wrap menu-inner">
     <div class="menu-head">
-      <div class="menu-head-left"><a class="brand" href="${c.l('')}" aria-label="${site.name}, ${esc(T.home)}"><img src="${c.u('img/logo.png')}" alt="" width="52" height="52"></a><span class="kicker">${pixels}${esc(T.allCategories)}</span></div>
+      <div class="menu-head-left"><a class="brand" href="${c.l('')}" aria-label="${site.name}, ${esc(T.home)}"><img src="${c.u('img/logo.png')}" alt="" width="52" height="52"></a><span class="kicker">${pixels}${esc(T.menu)}</span></div>
       <button class="menu-close" type="button" aria-label="${esc(T.close)}">${icons.close}</button>
     </div>
     <ul class="menu-grid">
@@ -443,7 +459,7 @@ ${sections}`;
   return layout(c, { body, bodyClass: 'page-home', image: data.home.hero || featured?.cover });
 }
 
-const HOME_SECTIONS = ['how-it-works', 'absorbers', 'shop', 'contact'];
+const HOME_SECTIONS = ['how-it-works', 'shop', 'past-work', 'contact'];
 
 // The big photo on the home page: the featured piece's hero (or photos/home/hero.jpg),
 // then its other photos, with arrows. The featured piece has "home": true in info.json.
@@ -490,7 +506,7 @@ function categoryPage(data, cat, lang) {
       </div>
     </section>`;
   }
-  const others = categories.filter((x) => x !== cat);
+  const others = shownCategories.filter((x) => x !== cat);
   const body = `${pageHead(lang, { kicker: t(cat.kicker, lang), title: t(cat.title, lang), intro: t(cat.intro, lang) })}
 ${content}
 ${otherCategories(c, others)}`;
@@ -499,6 +515,7 @@ ${otherCategories(c, others)}`;
 
 function otherCategories(c, list) {
   const { lang } = c;
+  if (!list.length) return '';
   return `<section class="wrap more">
   <h2 class="more-title">${esc(ui[lang].allCategories)}</h2>
   <ul class="mini-grid">
@@ -599,8 +616,55 @@ function shopPage(data, lang) {
 <section class="wrap">
   ${forSale.length ? `<ul class="cards">${forSale.map((p) => projectCard(c, p, { showPrice: true })).join('\n')}</ul>` : `<p class="empty">${esc(t(P.empty, lang))}</p>`}
 </section>
-${otherCategories(c, categories)}`;
+${otherCategories(c, shownCategories.length > 1 ? shownCategories : [])}`;
   return layout(c, { title: t(P.title, lang), description: t(P.tagline, lang), body, image: data.covers.shop });
+}
+
+// Past work: loose photos from photos/past-work/, captions in photos/past-work/captions.json.
+function pastWorkPage(data, lang) {
+  const P = pages.pastWork;
+  const c = { ...ctx(lang, `${prefix(lang)}${P.slug}/`), data };
+  const T = ui[lang];
+  const items = data.pastWork;
+  const grid = items.length
+    ? `<ul class="past-grid">${items
+        .map(
+          (x, k) => `<li><button type="button" class="past-item" data-index="${k}" data-full="${c.u(x.image.src)}" data-caption="${esc(t(x.caption, lang))}">${picture(c, x.image, { alt: t(x.caption, lang), sizes: '(min-width: 1100px) 25vw, (min-width: 700px) 33vw, 50vw' })}</button></li>`,
+        )
+        .join('\n')}</ul>`
+    : `<p class="empty">${esc(t(P.empty, lang))}</p>`;
+  const body = `${pageHead(lang, { kicker: t(P.kicker, lang), title: t(P.title, lang), intro: [t(P.tagline, lang)] })}
+<section class="wrap">${grid}</section>
+<dialog class="past-box">
+  <figure><img alt=""><figcaption></figcaption></figure>
+  <button type="button" class="past-close" aria-label="${esc(T.close)}">${icons.close}</button>
+  <button type="button" class="past-prev" aria-label="${esc(T.prevPhoto)}">${icons.chevL}</button>
+  <button type="button" class="past-next" aria-label="${esc(T.nextPhoto)}">${icons.chevR}</button>
+</dialog>`;
+  return layout(c, { title: t(P.title, lang), description: t(P.tagline, lang), body, image: items[0]?.image });
+}
+
+async function readPastWork() {
+  const dir = path.join(PHOTOS, 'past-work');
+  if (!existsSync(dir)) return [];
+  let captions = {};
+  const capFile = path.join(dir, 'captions.json');
+  if (existsSync(capFile)) {
+    try {
+      captions = JSON.parse(await fs.readFile(capFile, 'utf8'));
+    } catch (e) {
+      throw new Error(`Could not read photos/past-work/captions.json: ${e.message}`);
+    }
+  }
+  const files = (await fs.readdir(dir))
+    .filter((f) => IMAGE_RE.test(f) && !f.startsWith('.'))
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const items = [];
+  for (const f of files) {
+    const slug = path.parse(f).name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'photo';
+    items.push({ file: f, caption: captions[f] || '', image: await processImage(path.join(dir, f), `media/past-work/${slug}`) });
+  }
+  return items;
 }
 
 function guidePage(data, lang) {
@@ -687,7 +751,7 @@ async function build() {
   await copyDir(STATIC, OUT);
   await fs.copyFile(path.join(ROOT, 'CNAME'), path.join(OUT, 'CNAME')).catch(() => {});
 
-  const data = { projects: {}, covers: {}, home: await readHome() };
+  const data = { projects: {}, covers: {}, home: await readHome(), pastWork: await readPastWork() };
   for (const cat of categories) {
     data.projects[cat.slug] = await readProjects(cat);
     const fallback = path.join(STATIC, 'img', 'categories', `${cat.slug}.jpg`);
@@ -699,21 +763,23 @@ async function build() {
   data.covers.shop = firstForSale?.images[1] || firstForSale?.cover || data.covers.diffusers;
 
   const urls = [];
-  const emit = async (rel, html) => {
+  const emit = async (rel, html, { listed = true } = {}) => {
     await write(rel === '' || rel.endsWith('/') ? `${rel}index.html` : rel, html);
-    if (rel !== '404.html') urls.push(rel);
+    if (rel !== '404.html' && listed) urls.push(rel);
   };
 
   for (const lang of languages) {
     const pre = prefix(lang);
     await emit(pre, homePage(data, lang));
     for (const cat of categories) {
-      await emit(`${pre}${cat.slug}/`, categoryPage(data, cat, lang));
+      const listed = !cat.hidden;
+      await emit(`${pre}${cat.slug}/`, categoryPage(data, cat, lang), { listed });
       for (const [i, p] of data.projects[cat.slug].entries()) {
-        await emit(`${pre}${cat.slug}/${p.slug}/`, projectPage(data, p, i, lang));
+        await emit(`${pre}${cat.slug}/${p.slug}/`, projectPage(data, p, i, lang), { listed });
       }
     }
     await emit(`${pre}${pages.shop.slug}/`, shopPage(data, lang));
+    await emit(`${pre}${pages.pastWork.slug}/`, pastWorkPage(data, lang), { listed: data.pastWork.length > 0 });
     await emit(`${pre}${pages.howItWorks.slug}/`, guidePage(data, lang));
     await emit(`${pre}${pages.contact.slug}/`, contactPage(data, lang));
   }

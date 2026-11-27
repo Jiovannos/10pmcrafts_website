@@ -104,6 +104,7 @@ export const categories = [
   },
   {
     slug: 'absorbers',
+    hidden: true, // not linked anywhere yet; set to false to show it again
     cover: 'img/categories/absorbers.jpg',
     title: { en: 'Absorber panels', el: 'Absorbers' },
     kicker: { en: 'Painted by music', el: 'Ζωγραφισμένα από μουσική' },
@@ -128,6 +129,7 @@ export const categories = [
   },
   {
     slug: 'wall-pixel-art',
+    hidden: true,
     cover: 'img/categories/wall-pixel-art.jpg',
     title: { en: 'Wall pixel art', el: 'Pixel art σε τοίχους' },
     kicker: { en: 'Murals', el: 'Τοιχογραφίες' },
@@ -150,6 +152,7 @@ export const categories = [
   },
   {
     slug: 'ground-pixel-art',
+    hidden: true,
     cover: 'img/categories/ground-pixel-art.jpg',
     title: { en: 'Ground pixel art', el: 'Pixel art σε δάπεδα' },
     kicker: { en: 'Pavements & squares', el: 'Πεζοδρόμια & πλατείες' },
@@ -186,11 +189,11 @@ export const pages = {
     },
     intro: {
       en: [
-        'Every piece is made by hand. Some are ready to ship; most are made to order, in the size and colours that fit your room.',
+        'Every piece is made by hand. Some are ready to ship, or you can order a custom piece in the size and colours that fit your room.',
         'Send us a photo of the wall and a few words about the space, and we will propose a design.',
       ],
       el: [
-        'Κάθε έργο φτιάχνεται στο χέρι. Κάποια είναι έτοιμα για αποστολή, τα περισσότερα φτιάχνονται κατά παραγγελία, στο μέγεθος και στα χρώματα που ταιριάζουν στον χώρο σου.',
+        'Κάθε έργο φτιάχνεται στο χέρι. Κάποια είναι έτοιμα για αποστολή, αλλιώς μπορείς να παραγγείλεις ένα δικό σου, στο μέγεθος και στα χρώματα που ταιριάζουν στον χώρο σου.',
         'Στείλε μας μια φωτογραφία του τοίχου και δυο λόγια για τον χώρο, και θα σου προτείνουμε ένα σχέδιο.',
       ],
     },
@@ -210,6 +213,17 @@ export const pages = {
       en: 'Why a room sounds the way it does, and what panels on the wall actually do.',
       el: 'Γιατί ένα δωμάτιο ακούγεται όπως ακούγεται, και τι κάνουν πραγματικά τα πάνελ στον τοίχο.',
     },
+  },
+  pastWork: {
+    slug: 'past-work',
+    title: { en: 'Past work', el: 'Παλιότερες δουλειές' },
+    menuTitle: { en: 'Past work', el: 'Παλιότερες δουλειές' },
+    kicker: { en: 'Archive', el: 'Αρχείο' },
+    tagline: {
+      en: 'Finished pieces from earlier years.',
+      el: 'Τελειωμένα έργα από τα προηγούμενα χρόνια.',
+    },
+    empty: { en: 'Photos coming soon.', el: 'Οι φωτογραφίες έρχονται σύντομα.' },
   },
   contact: {
     slug: 'contact',
@@ -253,7 +267,15 @@ export const guide = {
       p: [
         'In an empty room with hard walls, sound bounces from surface to surface many times before it fades. You hear the direct sound from the speaker or the voice, and then a crowd of reflections arriving a few milliseconds later.',
         'Too many strong reflections cause the familiar problems: a clap that rings like a metallic "flutter", speech that gets muddy, music that loses detail, a home studio where mixes never sound right anywhere else.',
-        'There are two ways to deal with a reflection: take its energy away (absorption), or break it up and spread it around (diffusion).',
+        'There are two ways to deal with a reflection: break it up and spread it around (diffusion), or take its energy away (absorption).',
+      ],
+    },
+    {
+      h: 'Diffusion: spreading energy around',
+      figure: 'diffusion',
+      p: [
+        'A diffuser does not remove sound. It keeps the energy in the room but changes its shape: instead of one strong mirror-like reflection, you get many weak ones spreading in all directions and arriving at slightly different times.',
+        'This tames the strong reflections that boost some frequencies and cancel out others when they meet the direct sound. The room keeps its life, and you hear the music the way it was played.',
       ],
     },
     {
@@ -266,24 +288,14 @@ export const guide = {
       ],
     },
     {
-      h: 'Diffusion: spreading energy around',
-      figure: 'diffusion',
-      p: [
-        'A diffuser does not remove sound. It keeps the energy in the room but changes its shape: instead of one strong mirror-like reflection, you get many weak ones spreading in all directions and arriving at slightly different times.',
-        'The classic design is a surface of wells or blocks of different depths, calculated from a number sequence (quadratic residue or primitive root sequences). Sound that hits a deep block travels further before it returns than sound that hits a shallow one, so the reflected waves interfere and fan out.',
-        'Depth sets the lowest frequency a diffuser handles; the size of the blocks sets the highest. A panel around 10 cm deep starts to work well from roughly 1 kHz, which covers most of what gives a room its "glare". Blocks that are a few centimetres wide keep working into the high frequencies.',
-        'A 2D "skyline" diffuser, made of square blocks like ours, scatters sound both horizontally and vertically. That is why it looks like a little city, and why it is such a good canvas for colour.',
-      ],
-    },
-    {
       h: 'Using them together',
       figure: 'room',
       p: [
         'Most good-sounding rooms use both. A simple recipe for a listening room or home studio:',
       ],
       list: [
-        'Absorbers at the first reflection points on the side walls and ceiling, so the stereo image stays sharp.',
         'Diffusers on the back wall behind the listener, so the room stays lively and spacious without slapback echo.',
+        'Absorbers at the first reflection points on the side walls and ceiling, so the stereo image stays sharp.',
         'Bass traps in the corners if low frequencies boom.',
         'Bare parallel walls are the first place to treat: that is where flutter echo lives.',
       ],
@@ -299,7 +311,15 @@ export const guide = {
       p: [
         'Σε ένα άδειο δωμάτιο με σκληρούς τοίχους, ο ήχος αναπηδά από επιφάνεια σε επιφάνεια πολλές φορές πριν σβήσει. Ακούς τον απευθείας ήχο από το ηχείο ή τη φωνή, και αμέσως μετά ένα πλήθος από ανακλάσεις που φτάνουν λίγα χιλιοστά του δευτερολέπτου αργότερα.',
         'Πολλές δυνατές ανακλάσεις φέρνουν τα γνωστά προβλήματα: ένα παλαμάκι που «κουδουνίζει» μεταλλικά (flutter echo), ομιλία που θολώνει, μουσική που χάνει λεπτομέρεια, ένα home studio όπου οι μίξεις δεν ακούγονται ποτέ σωστά αλλού.',
-        'Υπάρχουν δύο τρόποι να αντιμετωπίσεις μια ανάκλαση: να της πάρεις ενέργεια (απορρόφηση), ή να τη σπάσεις και να την απλώσεις στον χώρο (διάχυση).',
+        'Υπάρχουν δύο τρόποι να αντιμετωπίσεις μια ανάκλαση: να τη σπάσεις και να την απλώσεις στον χώρο (διάχυση), ή να της πάρεις ενέργεια (απορρόφηση).',
+      ],
+    },
+    {
+      h: 'Διάχυση: απλώνοντας την ενέργεια',
+      figure: 'diffusion',
+      p: [
+        'Ένας διαχυτής (diffuser) δεν αφαιρεί ήχο. Κρατά την ενέργεια μέσα στον χώρο αλλά αλλάζει το σχήμα της: αντί για μία δυνατή ανάκλαση σαν από καθρέφτη, παίρνεις πολλές αδύναμες που απλώνονται προς όλες τις κατευθύνσεις και φτάνουν σε ελαφρώς διαφορετικούς χρόνους.',
+        'Έτσι περιορίζονται οι δυνατές ανακλάσεις που, όταν συναντούν τον απευθείας ήχο, ενισχύουν κάποιες συχνότητες και εξουδετερώνουν κάποιες άλλες. Ο χώρος μένει ζωντανός και ακούς τη μουσική όπως παίχτηκε.',
       ],
     },
     {
@@ -312,24 +332,14 @@ export const guide = {
       ],
     },
     {
-      h: 'Διάχυση: απλώνοντας την ενέργεια',
-      figure: 'diffusion',
-      p: [
-        'Ένας διαχυτής (diffuser) δεν αφαιρεί ήχο. Κρατά την ενέργεια μέσα στον χώρο αλλά αλλάζει το σχήμα της: αντί για μία δυνατή ανάκλαση σαν από καθρέφτη, παίρνεις πολλές αδύναμες που απλώνονται προς όλες τις κατευθύνσεις και φτάνουν σε ελαφρώς διαφορετικούς χρόνους.',
-        'Ο κλασικός σχεδιασμός είναι μια επιφάνεια με πηγάδια ή κυβάκια διαφορετικού βάθους, υπολογισμένα από μια αριθμητική ακολουθία (quadratic residue ή primitive root). Ο ήχος που χτυπά ένα βαθύ κυβάκι διανύει μεγαλύτερη απόσταση μέχρι να επιστρέψει από αυτόν που χτυπά ένα ρηχό, έτσι τα ανακλώμενα κύματα συμβάλλουν μεταξύ τους και ανοίγουν σαν βεντάλια.',
-        'Το βάθος καθορίζει τη χαμηλότερη συχνότητα που χειρίζεται ένας διαχυτής· το μέγεθος των κύβων την υψηλότερη. Ένα πάνελ με βάθος περίπου 10 εκ. αρχίζει να δουλεύει καλά από το 1 kHz περίπου, που καλύπτει το μεγαλύτερο μέρος από αυτό που κάνει έναν χώρο να «τσιρίζει». Κύβοι πλάτους λίγων εκατοστών συνεχίζουν να δουλεύουν μέχρι τις ψηλές συχνότητες.',
-        'Ένας 2D «skyline» διαχυτής, φτιαγμένος από τετράγωνα κυβάκια όπως οι δικοί μας, σκορπίζει τον ήχο και οριζόντια και κάθετα. Γι’ αυτό μοιάζει με μια μικρή πόλη, και γι’ αυτό είναι τόσο καλός καμβάς για χρώμα.',
-      ],
-    },
-    {
       h: 'Μαζί, για καλύτερο αποτέλεσμα',
       figure: 'room',
       p: [
         'Τα περισσότερα δωμάτια που ακούγονται καλά χρησιμοποιούν και τα δύο. Μια απλή συνταγή για δωμάτιο ακρόασης ή home studio:',
       ],
       list: [
-        'Απορροφητές στα σημεία πρώτης ανάκλασης στους πλαϊνούς τοίχους και στο ταβάνι, ώστε η στερεοφωνική εικόνα να μένει καθαρή.',
         'Διαχυτές στον πίσω τοίχο, πίσω από τον ακροατή, ώστε ο χώρος να μένει ζωντανός και ευρύχωρος χωρίς ηχώ.',
+        'Απορροφητές στα σημεία πρώτης ανάκλασης στους πλαϊνούς τοίχους και στο ταβάνι, ώστε η στερεοφωνική εικόνα να μένει καθαρή.',
         'Bass traps στις γωνίες αν τα μπάσα «βουίζουν».',
         'Οι γυμνοί παράλληλοι τοίχοι είναι το πρώτο σημείο που θέλει φροντίδα: εκεί γεννιέται το flutter echo.',
       ],
